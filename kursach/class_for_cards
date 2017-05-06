@@ -1,6 +1,10 @@
-class Cards{
-	constructor(suit, rank){
+class Suit{
+	constructor(suit){
 	this.suit = suit;
-	this.rank = rank;s
 	}
 }
+var Suit = new Suit("diamond");
+var Suit = new Suit("pike");
+var Suit = new Suit("heart");
+var suit = new Suit("club");
+console.log(Suit);
