@@ -1,4 +1,4 @@
-function card(value, name, suit, trump){
+function Card(value, name, suit, trump){
 	this.value = value;
 	this.name = name;
 	this.suit = suit;
@@ -9,7 +9,7 @@ function card(value, name, suit, trump){
     }
 }
 
-function deck(){
+function genDeck(){
 	this.names = ['7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 	this.suits = ['Hearts','Diamonds','Spades','Clubs'];
 	var cards = [];
@@ -18,7 +18,7 @@ function deck(){
     for( var s = 0; s < this.suits.length; s++ ) {
         for( var n = 0; n < this.names.length; n++ ) {
             let rank = ranks[n];
-            cards.push( new card( rank, this.names[n], this.suits[s], s === trumpNumber ? true : false ) );
+            cards.push( new Card( rank, this.names[n], this.suits[s], false ) );
         }
     }
     function compareRandom(a, b){
@@ -27,21 +27,43 @@ function deck(){
     cards.sort(compareRandom);
     return cards;
 }
-//document.getElementById('deck').innerHTML +=
-var myDeck = deck();
-myDeck.forEach(function(c, i, myDeck) {
-    document.getElementById('deck').innerHTML += ' ' + c.toString() + '</br>';
-})
-function players(){
-    var bot1 = [];
-    var bot2 = [];
-    var player= [];
+
+function dealing(deck){
+    var players = [[],[],[]];
     
-        for(var j = 0; j < 6; j++){
-            bot1.push(myDeck.pop());
-            bot2.push(myDeck.pop());
-            player.push(myDeck.pop())   ;
-        }
-    return {player, bot1, bot2};    
+    for (let i = 0; i < 6; i++)
+    {
+        for(var j = 0; j < 3; j++){
+            players[j].push(deck.pop());
+            //animateCardMoveToPlayer(j);
+        }   
+    }
+    return players;    
 }
-console.log(players());
+
+function trumpingCards(players, trump)
+{
+    for (let i = 0; i < players.length; i++)
+    {
+        for (let j = 0; j < players[i].length; j++)
+        {
+            let current = players[i][j];
+            if (current.suit === trump)
+            {
+                current.trump = true;
+                if (current.name === '9')
+                    current.value = 14;
+                else if (current.name === 'J')
+                    current.value = 20;
+            }
+        }
+    }
+}
+
+function main(){
+    var myDeck = genDeck();
+    var players = dealing(myDeck);
+    let trumpCard = myDeck.pop();
+    trumpingCards(players, trumpCard.suit);
+    
+}
